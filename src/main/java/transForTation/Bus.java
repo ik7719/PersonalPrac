@@ -7,19 +7,21 @@ public class Bus {
     private int maxPassenger;
     private int currentPassenger;
     private int fee;
-    private String busNumber;
+    private Long busNumber;
     private int currentOil;
     private int currentSpeed;
     private BusCondition busCondition; // enum import
 
+    private final static BusSequence busSequence = new BusSequence();
+
     Scanner scan = new Scanner(System.in);
 
-    Bus(int maxPassenger, int currentPassenger, int fee, String busNumber, int currentOil, int currentSpeed){
+    Bus(int maxPassenger, int currentPassenger, int fee, int currentOil, int currentSpeed){
 
         this.maxPassenger = maxPassenger;
         this.currentPassenger = currentPassenger;
         this.fee = fee;
-        this.busNumber = busNumber;
+        this.busNumber = busSequence.nextVal();
         this.currentOil = currentOil;
         this.currentSpeed = currentSpeed;
         busCondition = BusCondition.운행;
@@ -27,11 +29,12 @@ public class Bus {
 
     public void drive() {
 
-        if(busCondition == BusCondition.차고지행 || currentOil < 10) {
-            System.out.println("운행이 불가능합니다.");
+        if(currentOil < 10) {
+            drivingConditionChange();
         } else {
-            System.out.println("버스 운행 10분 전입니다.");
             busCondition = BusCondition.운행;
+            System.out.println(busNumber + "번 버스에 손님이 탑승하셨습니다.");
+            passengerRide();
         }
 
     }
@@ -39,14 +42,8 @@ public class Bus {
     public void drivingConditionChange() {
 
         // enum 클래스를 바로 사용할 수는 없고 클래스를 참조할 변수를 선언하고 사용해야 함.
-        // TODO : 오일량이 10미만일 경우
-        if (currentOil < 10) {
-            busCondition = BusCondition.차고지행;
-            System.out.println("주유가 필요합니다.");
-        } else {
-            busCondition = BusCondition.운행;
-            System.out.println("운행이 가능한 상태입니다.");
-        }
+        busCondition = BusCondition.차고지행;
+        System.out.println("주유가 필요합니다.");
 
     }
 
@@ -56,6 +53,7 @@ public class Bus {
         } else {
             currentPassenger++;
             System.out.println("현재 탑승한 승객은 총 " + currentPassenger + "명 입니다.");
+            speedChange();
         }
     }
 
