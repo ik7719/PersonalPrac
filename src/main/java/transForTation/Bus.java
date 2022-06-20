@@ -1,4 +1,4 @@
-package Bus;
+package transForTation;
 
 import java.util.Scanner;
 
@@ -10,7 +10,7 @@ public class Bus {
     private String busNumber;
     private int currentOil;
     private int currentSpeed;
-    private Condition condition; // enum import
+    private BusCondition busCondition; // enum import
 
     Scanner scan = new Scanner(System.in);
 
@@ -22,16 +22,16 @@ public class Bus {
         this.busNumber = busNumber;
         this.currentOil = currentOil;
         this.currentSpeed = currentSpeed;
-        condition = Condition.운행;
+        busCondition = BusCondition.운행;
     }
 
     public void drive() {
 
-        if(condition == Condition.차고지행 || currentOil < 10) {
+        if(busCondition == BusCondition.차고지행 || currentOil < 10) {
             System.out.println("운행이 불가능합니다.");
         } else {
             System.out.println("버스 운행 10분 전입니다.");
-            condition = Condition.운행;
+            busCondition = BusCondition.운행;
         }
 
     }
@@ -41,17 +41,17 @@ public class Bus {
         // enum 클래스를 바로 사용할 수는 없고 클래스를 참조할 변수를 선언하고 사용해야 함.
         // TODO : 오일량이 10미만일 경우
         if (currentOil < 10) {
-            condition = Condition.차고지행;
+            busCondition = BusCondition.차고지행;
             System.out.println("주유가 필요합니다.");
         } else {
-            condition = Condition.운행;
+            busCondition = BusCondition.운행;
             System.out.println("운행이 가능한 상태입니다.");
         }
 
     }
 
     public void passengerRide() {
-        if(currentPassenger >= maxPassenger || condition != Condition.운행 ) {
+        if(currentPassenger >= maxPassenger || busCondition != BusCondition.운행 ) {
             System.out.println("탑승할 수 없습니다.");
         } else {
             currentPassenger++;
